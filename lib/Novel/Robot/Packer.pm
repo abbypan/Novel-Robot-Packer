@@ -7,6 +7,8 @@ use Novel::Robot::Packer::TXT;
 use Novel::Robot::Packer::HTML;
 use Novel::Robot::Packer::WordPress;
 
+our $VERSION = 0.03;
+
 sub init_packer {
       my ( $self, $site , $opt) = @_;
       my $s = $opt?'%$opt':'';
