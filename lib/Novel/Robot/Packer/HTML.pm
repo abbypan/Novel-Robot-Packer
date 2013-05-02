@@ -68,7 +68,7 @@ sub format_index {
 
     my $toc = '';
     for my $i ( 1 .. $index->{chapter_num} ) {
-        my $u = $index->{chapter_urls}[$i];
+        my $u = $index->{chapter_info}[$i]{url};
         next unless ($u);
 
         my $t = $index->{chapter_info}[$i]{title} || '';
@@ -90,12 +90,12 @@ sub format_before_chapter {
 sub format_chapter {
     my ( $self, $chap , $id) = @_;
 
-    $chap->{chapter_id} ||= $id || 1;
-    my $j = sprintf( "%03d# ", $chap->{chapter_id});
+    $chap->{id} ||= $id || 1;
+    my $j = sprintf( "%03d# ", $chap->{id});
 
     my $floor = <<__FLOOR__;
 <div class="floor">
-<div class="fltitle">$j<a name="toc$chap->{chapter_id}">$chap->{chapter}</a></div>
+<div class="fltitle">$j<a name="toc$chap->{id}">$chap->{title}</a></div>
 <div class="flcontent">$chap->{content}</div>
 </div>
 __FLOOR__

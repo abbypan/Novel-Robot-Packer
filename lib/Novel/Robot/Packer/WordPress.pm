@@ -17,12 +17,11 @@ sub BUILD {
 
     $self->{base_url}=~s#/$##;
     
-    $self->{wordpress} = WordPress::XMLRPC->new(
-        {   username => $self->{usr},
+    $self->{wordpress} = WordPress::XMLRPC->new( {   
+            username => $self->{usr},
             password => $self->{passwd},
             proxy    => "$self->{base_url}/xmlrpc.php",
-        }
-    );
+        });
 
     $self;
 }
@@ -32,25 +31,16 @@ sub open_packer {
     my ($self, $index) = @_;
     $self->{tags}       = exists $self->{tag} ? [ split ',', $self->{tag} ] : [];
     $self->{categories} = exists $self->{category} ? [ split ',', $self->{category} ] : [];
-    #$self->{chapter_ids}   = exists $self->{chapter_id}
-    #? [
-        #map {
-        #my ( $s, $e ) = split '-';
-        #$e ||= $s;
-        #( $s .. $e )
-        #} ( split ',', $self->{chapter_id} )
-    #]
-    #: [];
 }
 
 
 sub format_chapter {
     my ( $self, $c, $i ) = @_;
+    $i ||= $c->{id};
 
-    my $u = $c->{chapter_url};
-
+    my $u = $c->{url};
     my $d = {
-        'title' => qq[$c->{writer} 《$c->{book}》 $i : $c->{chapter}],
+        'title' => qq[$c->{writer} 《$c->{book}》 $i : $c->{title}],
         'description' => qq[<p>来自：<a href="$u">$u</a></p><p></p>$c->{content}],
         'mt_keywords' => [ $c->{writer}, $c->{book} ],
     };

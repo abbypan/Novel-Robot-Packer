@@ -34,9 +34,9 @@ sub format_index {
     my ($self, $index) = @_;
 
     my $num = $index->{chapter_num};
-    my $r = $index->{chapter_urls};
+    my $r = $index->{chapter_info};
 
-    my @chap_list = map { "chap $_ ".($r->[$_] || '') } (1 .. $num);
+    my @chap_list = map { "chap $_ ".($r->[$_]{title} || '') } (1 .. $num);
     my $toc = join("\n", @chap_list);
 
     $self->{fh}->print("$toc\n\n");
@@ -44,9 +44,9 @@ sub format_index {
 
 sub format_chapter {
     my ( $self, $chap, $id) = @_;
-
     $id ||= $chap->{id};
-    my $tree = HTML::TreeBuilder->new_from_content("chap $id<br>$chap->{content}");
+
+    my $tree = HTML::TreeBuilder->new_from_content("chap $id : $chap->{title}<br>$chap->{content}");
     my $c = $self->{formatter}->format($tree);
 
     $self->{fh}->print("$c\n\n");
