@@ -72,10 +72,11 @@ sub format_index {
         next unless ($u);
 
         my $t = $index->{chapter_info}[$i]{title} || '';
-        $toc .= qq`<li><a href="#toc$i">$t</a></li>\n`;
+        my $j = sprintf("%03d", $i);
+        $toc .= qq`<p>$j. <a href="#toc$i">$t</a></p>\n`;
     } ## end for my $i ( 1 .. $r->{chapter_num...})
 
-    $toc = qq[<div id="toc"><ol>$toc</ol></div>] if($toc);
+    $toc = qq[<div id="toc">$toc</div>] if($toc);
     $self->{fh}->print("$toc\n\n");
 
 } ## end sub format_index

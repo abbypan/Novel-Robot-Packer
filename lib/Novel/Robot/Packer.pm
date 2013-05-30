@@ -7,13 +7,13 @@ use Novel::Robot::Packer::TXT;
 use Novel::Robot::Packer::HTML;
 use Novel::Robot::Packer::WordPress;
 
-our $VERSION = 0.03;
+our $VERSION = 0.05;
 
 sub init_packer {
-      my ( $self, $site , $opt) = @_;
-      my $s = $opt?'%$opt':'';
-      my $packer = eval qq[new Novel::Robot::Packer::$site($s)];
-      return $packer;
+    my ( $self, $site , $opt) = @_;
+    my $s = $opt?'%$opt':'';
+    my $packer = eval qq[new Novel::Robot::Packer::$site($s)];
+    return $packer;
 }
 
 no Moo;
