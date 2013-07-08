@@ -9,19 +9,14 @@ extends 'Novel::Robot::Packer::Base';
 
 use IO::File;
 
-sub open_packer {
-    my ($self, $index) = @_;
-    my $fname = $self->format_filename("$index->{writer}-$index->{book}.html");
-    my $fh = IO::File->new($fname, '>:utf8');
-    return $fh;
-}
+has '+suffix'    => ( default => sub {'html'} );
 
 sub format_before_index {
-    my ( $self,$fh,  $index ) = @_;
+    my ( $self,  $index ) = @_;
     my $title      = "$index->{writer}  《$index->{book}》";
     my $css = $self->generate_css();
     my $index_url  = $index->{index_url} || '';
-$fh->print(qq[
+return qq[
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 
@@ -36,7 +31,7 @@ $css
 <body>
 <div id="title"><a href="$index_url">$title</a></div>
 
-]);
+];
 }
 
 sub generate_css
@@ -64,7 +59,7 @@ __CSS__
 } ## end sub read_css
  
 sub format_index {
-    my ( $self, $fh, $index ) = @_;
+    my ( $self,  $index ) = @_;
 
     my $toc = '';
     for my $i ( 1 .. $index->{chapter_num} ) {
@@ -78,19 +73,19 @@ sub format_index {
     } ## end for my $i ( 1 .. $r->{chapter_num...})
 
     $toc = qq[<div id="toc">$toc</div>] if($toc);
-    $fh->print("$toc\n\n");
+    return $toc;
 
 } ## end sub format_index
 
 sub format_before_chapter {
-    my ($self,$fh,  $index) = @_;
+    my ($self, $index) = @_;
 
-    $fh->print('<div id="content">'."\n\n");
+    return '<div id="content">';
 }
 
 
 sub format_chapter {
-    my ( $self, $fh, $chap , $id) = @_;
+    my ( $self, $chap , $id) = @_;
 
 
     $chap->{id} ||= $id || 1;
@@ -106,21 +101,16 @@ sub format_chapter {
 </div>
 __FLOOR__
 
-    $fh->print("$floor\n\n");
+    return $floor;
 } ## end sub format_chapter
 
 sub format_after_chapter {
-    my ( $self,$fh,  $index ) = @_;
+    my ( $self,  $index ) = @_;
 
-    $fh->print("</div></body></html>");
+    return "</div></body></html>";
 }
 
 
-sub close_packer {
-    my ($self,$fh,  $index) = @_;
-
-    $fh->close;
-}
 
 no Moo;
 1;

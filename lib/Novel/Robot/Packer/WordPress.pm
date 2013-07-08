@@ -49,12 +49,22 @@ sub BUILD {
 
 sub open_packer {
     my ($self, $index_ref) = @_;
-    return $index_ref;
+
+    my $write_sub = sub {
+        my ($d) = @_;
+
+        my $pid = $self->{wordpress}->newPost( $d, 1 );
+        my $post_url = "$self->{base_url}/?p=$pid";
+
+        return $post_url;
+    };
+
+    return $write_sub;
 }
 
 
 sub format_chapter {
-    my ( $self, $conf, $c, $i ) = @_;
+    my ( $self, $c, $i ) = @_;
     my $j = sprintf("%03d", $i || $c->{id});
 
     my $d = {
@@ -72,10 +82,7 @@ sub format_chapter {
     my @fields = qw/title description mt_keywords/;
     $d->{$_} = encode('utf8', $d->{$_}) for @fields;
 
-    my $pid = $self->{wordpress}->newPost( $d, 1 );
-    my $post_url = "$self->{base_url}/?p=$pid";
-
-    return $post_url;
+    return $d;
 } ## end sub generate_chapter_url
 
 no Moo;
