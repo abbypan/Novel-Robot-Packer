@@ -80,11 +80,16 @@ sub get_sub_write_file {
     return $write_sub;
 }
 
+sub format_default_filename {
+    my ($self, $r) = @_;
+    return "$r->{writer}-$r->{book}.$self->{suffix}";
+}
+
 sub format_filename {
     my ($self, $r, $o) = @_;
-    my $filename = $o->{filename} || 
-        "$r->{writer}-$r->{book}.$self->{suffix}";
-    $filename=~s{[/><\\`;'\$^*\(\)#@!":\?|]}{}g;
+    my $filename = $o->{filename} || $self->format_default_filename($r);
+    $filename=~s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
+    
     my $fname = encode( locale  => $filename);
     return $fname;
 }
