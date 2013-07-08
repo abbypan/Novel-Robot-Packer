@@ -5,13 +5,13 @@
 
 =head1 FUNCTION
 
-=head2 new 初始化
+=head2 open_packer 
 
-   my $packer = Novel::Robot::Packer::WordPress->new({
-            username => 'someusr',
-            password => 'somepasswd',,
-	    base_url => 'http://www.somewordpress.com',
-	tag => [ '定柔三迷', '古风' ], 
+   my ($write_sub, $write_dst) = $self->open_packer($index_ref, {
+        username => 'someusr',
+        password => 'somepasswd',,
+        base_url => 'http://www.somewordpress.com',
+        tag => [ '定柔三迷', '古风' ], 
         category => [ '原创' ], 
    });
 
@@ -30,36 +30,38 @@ use Encode;
 use Encode::Locale;
 
 
-sub BUILD {
-    my ( $self ) = @_;
+sub open_packer {
+    my ($self, $index_ref, $o) = @_;
+    $o->{tag} ||= [];
+    $o->{category} ||= [];
 
-    $self->{base_url}=~s#/$##;
-    $self->{tag} ||= [];
-    $self->{category} ||= [];
+    $o->{base_url}=~s#/$##;
     
-    $self->{wordpress} = WordPress::XMLRPC->new( {   
-            username => $self->{usr},
-            password => $self->{passwd},
-            proxy    => "$self->{base_url}/xmlrpc.php",
+    my $wp = WordPress::XMLRPC->new( {   
+            username => $o->{usr},
+            password => $o->{passwd},
+            proxy    => "$o->{base_url}/xmlrpc.php",
         });
 
-    $self;
-}
-
-
-sub open_packer {
-    my ($self, $index_ref) = @_;
 
     my $write_sub = sub {
         my ($d) = @_;
+        push @{$d->{mt_keywords}}, @{$o->{tag}} ;
+        $d->{mt_keywords} = join(", ", @{$d->{mt_keywords}});
 
-        my $pid = $self->{wordpress}->newPost( $d, 1 );
-        my $post_url = "$self->{base_url}/?p=$pid";
+        my @fields = qw/title description mt_keywords/;
+        $d->{$_} = encode('utf8', $d->{$_}) for @fields;
+
+        push @{$d->{categories}}, @{$o->{category}} ;
+        $_ = encode('utf8', $_) for @{$d->{categories}};
+
+        my $pid = $wp->newPost( $d, 1 );
+        my $post_url = "$o->{base_url}/?p=$pid";
 
         return $post_url;
     };
 
-    return $write_sub;
+    return ($write_sub, \$o->{base_url});
 }
 
 
@@ -73,14 +75,6 @@ sub format_chapter {
         'mt_keywords' => [ $c->{writer}, $c->{book} ],
         'categories' => [], 
     };
-    push @{$d->{mt_keywords}}, @{$self->{tag}} ;
-    $d->{mt_keywords} = join(", ", @{$d->{mt_keywords}});
-
-    push @{$d->{categories}}, @{$self->{category}} ;
-    $_ = encode('utf8', $_) for @{$d->{categories}};
-
-    my @fields = qw/title description mt_keywords/;
-    $d->{$_} = encode('utf8', $d->{$_}) for @fields;
 
     return $d;
 } ## end sub generate_chapter_url
