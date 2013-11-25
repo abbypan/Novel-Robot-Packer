@@ -71,7 +71,7 @@ sub format_chapter {
 
     my $d = {
         'title' => qq[$c->{writer} 《$c->{book}》 $j : $c->{title}],
-        'description' => qq[<p>来自：<a href="$c->{url}">$c->{url}</a></p><p></p>$c->{content}],
+        'description' => qq[<p>来自：<a href="$c->{url}">$c->{url}</a></p><br/>$c->{content}],
         'mt_keywords' => [ $c->{writer}, $c->{book} ],
         'categories' => [], 
     };
