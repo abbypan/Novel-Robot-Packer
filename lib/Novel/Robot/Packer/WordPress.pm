@@ -25,7 +25,9 @@ use utf8;
 use Moo;
 extends 'Novel::Robot::Packer::Base';
 
-use WordPress::XMLRPC;
+#use WordPress::XMLRPC;
+#use WP::API;
+use XMLRPC::Lite;
 use Encode;
 use Encode::Locale;
 
@@ -36,13 +38,8 @@ sub open_packer {
     $o->{category} ||= [];
 
     $o->{base_url}=~s#/$##;
-    
-    my $wp = WordPress::XMLRPC->new( {   
-            username => $o->{usr},
-            password => $o->{passwd},
-            proxy    => "$o->{base_url}/xmlrpc.php",
-        });
 
+    my $wp = XMLRPC::Lite->proxy("$o->{base_url}/xmlrpc.php");
 
     my $write_sub = sub {
         my ($d) = @_;
@@ -55,11 +52,14 @@ sub open_packer {
         push @{$d->{categories}}, @{$o->{category}} ;
         $_ = encode('utf8', $_) for @{$d->{categories}};
 
-        my $pid = $wp->newPost( $d, 1 );
+        my $pid = 
+        $wp->call('metaWeblog.newPost', 1, 
+            $o->{usr}, $o->{passwd}, $d, 1 )->result;
         my $post_url = "$o->{base_url}/?p=$pid";
 
         return $post_url;
     };
+
 
     return ($write_sub, \$o->{base_url});
 }
