@@ -70,8 +70,8 @@ sub get_sub_write_file {
     my ($self, $index_ref, $o) = @_;
 
     my $fname = $self->format_filename($index_ref, $o);
-    open my $fh, '>:utf8', $fname;
 
+    open my $fh, '>:utf8', $fname;
     my $write_sub = sub {
         my ($c) = @_;
         print $fh $c,"\n\n";

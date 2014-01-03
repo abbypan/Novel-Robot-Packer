@@ -29,8 +29,9 @@ use Moo;
 use Novel::Robot::Packer::TXT;
 use Novel::Robot::Packer::HTML;
 use Novel::Robot::Packer::WordPress;
+use Novel::Robot::Packer::MOBI;
 
-our $VERSION = 0.11;
+our $VERSION = 0.12;
 
 sub init_packer {
     my ( $self, $site , $opt) = @_;
