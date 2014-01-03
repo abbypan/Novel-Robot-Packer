@@ -37,7 +37,10 @@ sub open_packer {
 
     my $end_sub = sub {
         $book->make();
-        $book->save();
+        return $book->save() unless(exists $o->{write_scalar});
+
+        my $mhtml_data = $book->print_mhtml('result to var');
+        return \$mhtml_data;
     };
 
     return ($write_sub, $end_sub);
