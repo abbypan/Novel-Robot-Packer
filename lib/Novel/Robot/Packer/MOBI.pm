@@ -20,9 +20,11 @@ sub open_packer {
     my $fname = $self->format_filename($index_ref, $o);
     $book->set_filename($fname);
 
-    $book->set_title(encode("utf8", $index_ref->{book}));
-    $book->set_author(encode("utf8", $index_ref->{writer}));
-    $book->set_encoding(':encoding(UTF-8)');
+    $book->set_title(encode("UTF-8", $index_ref->{book}));
+    $book->set_author(encode("UTF-8", $index_ref->{writer}));
+    $book->{header_opts}={ language => 'zh-cn' };
+    #$book->set_encoding(':encoding(UTF-8)');
+    $book->set_encoding(':utf8');
 
     $book->add_toc_once();
     $book->add_pagebreak();
@@ -30,17 +32,32 @@ sub open_packer {
     my $write_sub = sub {
         my ($c) = @_;
         return unless($c);
-        $c = encode("utf8", $c);
+        $c = encode("UTF-8", $c);
         $book->add_mhtml_content($c);
         $book->add_pagebreak();
     };
 
     my $end_sub = sub {
         $book->make();
+        $book->print_mhtml();
         return $book->save() unless(exists $o->{write_scalar});
 
-        my $mhtml_data = $book->print_mhtml('result to var');
-        return \$mhtml_data;
+        use File::Temp qw/ tempfile tempdir /;
+        my ($fh, $temp_f) = tempfile();
+        $book->set_filename($temp_f);
+
+        $book->save();
+        my $mhtml_data;
+        {
+            local $/=undef;
+            $mhtml_data=<$fh>;
+        }
+
+        return (
+            \$mhtml_data, 
+            writer => $index_ref->{writer}, 
+            book => $index_ref->{book}
+        );
     };
 
     return ($write_sub, $end_sub);
@@ -54,6 +71,15 @@ sub format_chapter {
     
     $chap->{title} ||= '[锁]';
     $chap->{content} ||='';
+
+    for($chap->{content}){
+        s/^\s*|\s*$//s;
+        s/\r?\n+/\n/gs;
+        s/<br\s*\/?\s*>/\n\n/gsi;
+        s#</p>#\n\n#gsi;
+        s/<[^>]+>//gs;
+        s#(\S.*?)\n+#<p> $1 </p>\n#sg;
+    }
 
     my $floor = <<__FLOOR__;
 <h1>$j $chap->{title}</h1>

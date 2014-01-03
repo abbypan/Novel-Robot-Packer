@@ -63,7 +63,15 @@ sub get_sub_write_scalar {
         print $fh $c,"\n\n";
     };
 
-    return ($write_sub, \$o->{write_scalar});
+    my $end_sub = sub {
+        return (
+            \$o->{write_scalar}, 
+            writer => $index_ref->{writer}, 
+            book => $index_ref->{book}
+        );
+    };
+
+    return ($write_sub, $end_sub);
 }
 
 sub get_sub_write_file {
