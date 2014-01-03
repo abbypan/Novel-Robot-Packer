@@ -39,7 +39,6 @@ sub open_packer {
 
     my $end_sub = sub {
         $book->make();
-        $book->print_mhtml();
         return $book->save() unless(exists $o->{write_scalar});
 
         use File::Temp qw/ tempfile tempdir /;
