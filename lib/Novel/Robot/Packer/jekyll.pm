@@ -16,7 +16,7 @@ sub main {
     my ($self, $bk, %opt) = @_;
 
     $self->{formatter} = HTML::FormatText->new() ;
-    $self->tidy_content($_) for @{$bk->{chapter_info}};
+    $self->tidy_content($_) for @{$bk->{floor_list}};
 
     $self->process_template($bk, %opt);
     return $opt{output};
@@ -59,11 +59,11 @@ tags: [ $tag ]
 
 # [[% writer %]]([% writer_url %])《 [[% book %]]([% index_url %]) 》
 
-[% FOREACH r IN chapter_info %]- \[[% r.title %]\](#chap[% r.id %])
+[% FOREACH r IN floor_list %]- \[[% r.writer %] [% r.title %]\](#chap[% r.id %])
 [% END %]
 
-[% FOREACH r IN chapter_info %]
-<h1 id="chap[% r.id %]">  [% r.id %] [% r.title %]  </h1>\n\n
+[% FOREACH r IN floor_list %]
+<h1 id="chap[% r.id %]">  [% r.id %] [% r.writer %] [% r.title %] [% r.time %] </h1>\n\n
 [% r.content %]
 [% END %]
     };

@@ -34,7 +34,7 @@ sub main {
     my $post_chapter_sub = $self->post_chapter_sub(%o);
 
     my @chapter_url ;
-    for my $c (@{$book_ref->{chapter_info}}){
+    for my $c (@{$book_ref->{floor_list}}){
         my $d = $self->format_chapter($c);
         next unless($d);
 

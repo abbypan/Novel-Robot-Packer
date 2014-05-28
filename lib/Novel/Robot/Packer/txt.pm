@@ -16,7 +16,7 @@ sub main {
     my ($self, $bk, %opt) = @_;
 
     $self->{formatter} = HTML::FormatText->new() ;
-    $self->format_content_to_txt($_) for @{$bk->{chapter_info}};
+    $self->format_content_to_txt($_) for @{$bk->{floor_list}};
 
     $self->process_template($bk, %opt);
     return $opt{output};
@@ -33,11 +33,11 @@ sub process_template {
     my $txt = qq{
     [% writer %]《 [% book %] 》
 
-    [% FOREACH r IN chapter_info %][% r.id %].  [% r.title %]
+    [% FOREACH r IN floor_list %][% r.id %].  [% r.writer %] [% r.title %]
     [% END %]
 
-    [% FOREACH r IN chapter_info %]
-    [% r.id %].  [% r.title %]
+    [% FOREACH r IN floor_list %]
+    [% r.id %]. [% r.writer %] [% r.title %] [% r.time %]
     [% r.content %]
     [% END %]
     };
