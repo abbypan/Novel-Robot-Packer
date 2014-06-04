@@ -10,7 +10,7 @@
    my $index_url = $self->main($book_ref, 
         usr => 'someusr',
         passwd => 'somepasswd',,
-        wp_url => 'http://www.somewordpress.com',
+        packer_url => 'http://www.somewordpress.com',
         tag => [ '定柔三迷', '古风' ], 
         category => [ '原创' ], 
    );
@@ -77,9 +77,9 @@ sub post_chapter_sub {
     my ($self, %o) = @_;
     $o{tag} ||= [];
     $o{category} ||= [];
-    $o{wp_url}=~s#/$##;
+    $o{packer_url}=~s#/$##;
 
-    my $wp = XMLRPC::Lite->proxy("$o{wp_url}/xmlrpc.php");
+    my $wp = XMLRPC::Lite->proxy("$o{packer_url}/xmlrpc.php");
     
     my $write_sub = sub {
         my ($d) = @_;
@@ -96,7 +96,7 @@ sub post_chapter_sub {
         my $pid = 
         $wp->call('metaWeblog.newPost', 1, 
             $o{usr}, $o{passwd}, $d, 1 )->result;
-        my $post_url = "$o{wp_url}/?p=$pid";
+        my $post_url = "$o{packer_url}/?p=$pid";
 
         return $post_url;
     };

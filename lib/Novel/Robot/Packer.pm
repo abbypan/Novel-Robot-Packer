@@ -5,7 +5,7 @@ use warnings;
 use Encode::Locale;
 use Encode;
 
-our $VERSION = 0.14;
+our $VERSION = 0.15;
 
 sub new {
     my ( $self, %opt ) = @_;
@@ -15,7 +15,7 @@ sub new {
     bless {%opt}, $module;
 }
 
-sub format_book_output {
+sub format_item_output {
     my ( $self, $bk, $o ) = @_;
     if ( ! $o->{output} ) {
         my $html = '';
