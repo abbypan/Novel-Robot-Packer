@@ -1,11 +1,11 @@
-# ABSTRACT: 小说打包引擎
+# ABSTRACT: pack novel/bbs content to txt / html / jekyll / wordpress, etc
 package  Novel::Robot::Packer;
 use strict;
 use warnings;
 use Encode::Locale;
 use Encode;
 
-our $VERSION = 0.15;
+our $VERSION = 0.16;
 
 sub new {
     my ( $self, %opt ) = @_;

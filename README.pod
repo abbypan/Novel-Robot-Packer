@@ -4,13 +4,17 @@
 
 =head1 NAME
 
-L<Novel::Robot::Packer> 小说打包引擎
+L<Novel::Robot::Packer> pack novel/bbs content to txt / html / jekyll / wordpress, etc
+
+小说/贴子 打包引擎
 
 =head2 支持输出类型
 
-    txt  : txt形式的小说
+    txt  : txt文本格式
 
-    html : 网页形式的小说
+    html : html网页格式
+
+    jekyll : md格式的jekyll网页文件
 
     wordpress : 将小说发布到WordPress空间
 
@@ -27,4 +31,3 @@ L<Novel::Robot::Packer> 小说打包引擎
    );
 
 =cut
-
