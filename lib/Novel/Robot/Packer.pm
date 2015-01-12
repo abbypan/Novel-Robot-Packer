@@ -1,11 +1,11 @@
-# ABSTRACT: pack novel/bbs content to txt / html / jekyll / wordpress, etc
+# ABSTRACT: pack novel/bbs content to html / txt / web / jekyll / wordpress, etc
 package  Novel::Robot::Packer;
 use strict;
 use warnings;
 use Encode::Locale;
 use Encode;
 
-our $VERSION = 0.16;
+our $VERSION = 0.17;
 
 sub new {
     my ( $self, %opt ) = @_;
@@ -29,6 +29,9 @@ sub format_item_output {
 
 sub format_default_filename {
     my ( $self, $r, $o) = @_;
+    #my $default_id = $r->{floor_list}[0]{id};
+    #$default_id = '' if($default_id<2);
+
     my $f =  "$r->{writer}-$r->{book}." . $self->suffix();
     $f =~ s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
     return encode( locale => $f );
