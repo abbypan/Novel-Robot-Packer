@@ -10,6 +10,8 @@ L<Novel::Robot::Packer> pack novel/bbs content to txt / html / wordpress, etc
 
 =head2 支持输出类型
 
+    raw  : 经过MessagePack压缩的二进制文件
+
     html : html单网页格式
 
     txt  : txt文本格式

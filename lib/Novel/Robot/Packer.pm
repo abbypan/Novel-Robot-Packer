@@ -5,7 +5,7 @@ use warnings;
 use Encode::Locale;
 use Encode;
 
-our $VERSION = 0.17;
+our $VERSION = 0.18;
 
 sub new {
     my ( $self, %opt ) = @_;
@@ -13,6 +13,15 @@ sub new {
     my $module = "Novel::Robot::Packer::$opt{type}";
     eval "require $module;";
     bless {%opt}, $module;
+}
+
+sub suffix {
+    return '';
+}
+
+sub main {
+    my ($self, $bk, %opt) = @_;
+    return $opt{output};
 }
 
 sub format_item_output {
@@ -37,8 +46,6 @@ sub format_default_filename {
     return encode( locale => $f );
 }
 
-sub suffix {
-    return '';
-}
+
 
 1;
