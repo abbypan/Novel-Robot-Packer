@@ -1,11 +1,11 @@
-# ABSTRACT: pack novel/bbs content to html / txt / web / jekyll / wordpress, etc
+# ABSTRACT: pack novel/bbs content to html / txt / web , etc
 package  Novel::Robot::Packer;
 use strict;
 use warnings;
 use Encode::Locale;
 use Encode;
 
-our $VERSION = 0.18;
+our $VERSION = 0.19;
 
 sub new {
     my ( $self, %opt ) = @_;
