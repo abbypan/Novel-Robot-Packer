@@ -38,8 +38,6 @@ sub format_item_output {
 
 sub format_default_filename {
     my ( $self, $r, $o) = @_;
-    #my $default_id = $r->{floor_list}[0]{id};
-    #$default_id = '' if($default_id<2);
 
     my $f =  "$r->{writer}-$r->{book}." . $self->suffix();
     $f =~ s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
