@@ -44,6 +44,4 @@ sub format_default_filename {
     return encode( locale => $f );
 }
 
-
-
 1;

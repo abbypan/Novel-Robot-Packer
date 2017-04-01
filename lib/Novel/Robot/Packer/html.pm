@@ -22,9 +22,7 @@ sub process_template {
 
     my $toc = $opt{with_toc} ? qq{<div id="toc"><ul>
     [% FOREACH r IN floor_list %]
-    [% IF r.content %]
-    <li>[% r.id %]. <a href="#toc[% r.id %]">[% r.writer %] [% r.title %]</a></li>
-    [% END %]
+    [% IF r.content %] <li>[% r.id %]. <a href="#toc[% r.id %]">[% r.writer %] [% r.title %]</a></li> [% END %] 
     [% END %]
     </ul>
     </div>} : '';
@@ -66,7 +64,8 @@ body {
 <div class="floor">
 <div class="chapter">[% r.id %]. <a name="toc[% r.id %]">[% r.writer %] [% r.title %]</a>  [% r.time %]</div>
 <div class="content">[% r.content %]</div>
-</div>[% END %][% END %]
+</div>[% END %]
+[% END %]
 </div>
 </body>
 </html>

@@ -25,20 +25,28 @@ sub main {
 sub format_content_to_txt {
     my ($self, $r) = @_;
     my $tree = HTML::TreeBuilder->new_from_content($r->{content});
-    $r->{content} = $self->{formatter}->format($tree);
+    $r->{txt} = $self->{formatter}->format($tree);
+    $r->{txt}=~s/\n/\r\n/sg;
 }
 
 sub process_template {
     my ($self, $bk, %opt) = @_;
+
     my $txt = qq{
     [% writer %]《 [% book %] 》
 
-    [% FOREACH r IN floor_list %][% r.id %].  [% r.writer %] [% r.title %]
+    };
+
+    if($opt{with_toc}){
+    $txt.=qq{[% FOREACH r IN floor_list %][% r.id %].  [% r.writer %] [% r.title %]
     [% END %]
 
-    [% FOREACH r IN floor_list %]
+    };
+    }
+    
+    $txt.=qq{[% FOREACH r IN floor_list %]
     [% r.id %]. [% r.writer %] [% r.title %] [% r.time %]
-    [% r.content %]
+    [% r.txt %]
     [% END %]
     };
     my $tt=Template->new();
