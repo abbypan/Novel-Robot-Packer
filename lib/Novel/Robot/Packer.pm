@@ -39,7 +39,12 @@ sub format_item_output {
 sub format_default_filename {
     my ( $self, $r, $o) = @_;
 
-    my $f =  "$r->{writer}-$r->{book}." . $self->suffix();
+    my $item_info='';
+    if(exists $o->{min_item_num} and $o->{min_item_num}>1){
+        $item_info="-$o->{min_item_num}";
+    }
+
+    my $f =  "$r->{writer}-$r->{book}$item_info." . $self->suffix();
     $f =~ s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
     return encode( locale => $f );
 }
