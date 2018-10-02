@@ -43,7 +43,9 @@ sub format_default_filename {
     if(exists $o->{min_item_num} and $o->{min_item_num}>1){
         $item_info="-$o->{min_item_num}";
     }
-
+    elsif(exists $o->{min_page_num} and $o->{min_page_num}>1){
+        $item_info="-$o->{min_page_num}";
+    }
     my $f =  "$r->{writer}-$r->{book}$item_info." . $self->suffix();
     $f =~ s{[\[\]/><\\`;'\$^*\(\)\%#@!"&:\?|\s^,~]}{}g;
     return encode( locale => $f );
