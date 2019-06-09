@@ -52,3 +52,9 @@ sub format_default_filename {
 }
 
 1;
+
+=head1 NAME
+
+Novel::Robot::Packer - Pack novel/bbs content to html / txt / web , etc
+
+=cut
